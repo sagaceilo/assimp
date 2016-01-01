@@ -530,6 +530,11 @@ ADD_ASSIMP_IMPORTER(RAW
   RawLoader.h
 )
 
+ADD_ASSIMP_IMPORTER(SIB
+  SIBImporter.cpp
+  SIBImporter.h
+)
+
 ADD_ASSIMP_IMPORTER(SMD
   SMDLoader.cpp
   SMDLoader.h
@@ -563,12 +568,14 @@ ADD_ASSIMP_IMPORTER(X
 )
 
 ADD_ASSIMP_IMPORTER(GLTF
+  glTFAsset.h
+  glTFAsset.inl
+  glTFAssetWriter.h
+  glTFAssetWriter.inl
+
   glTFImporter.cpp
   glTFImporter.h
-  glTFUtil.cpp
-  glTFUtil.h
-  glTFFileData.h
-
+  
   glTFExporter.h
   glTFExporter.cpp
 )
@@ -655,11 +662,6 @@ SET ( openddl_parser_SRCS
 )
 SOURCE_GROUP( openddl_parser FILES ${openddl_parser_SRCS})
 
-SET( picojson_SRCS
-    ../contrib/picojson/picojson.h
-)
-SOURCE_GROUP( picojson FILES ${picojson_SRCS} )
-
 INCLUDE_DIRECTORIES( "../contrib/rapidjson/include" )
 
 # VC2010 fixes
@@ -706,7 +708,6 @@ SET( assimp_src
   ${Poly2Tri_SRCS}
   ${Clipper_SRCS}
   ${openddl_parser_SRCS}
-  ${picojson_SRCS}
   # Necessary to show the headers in the project when using the VC++ generator:
   ${Boost_SRCS}
 
@@ -755,8 +756,10 @@ if( MSVC )
     set(MSVC_PREFIX "vc110")
   elseif( MSVC12 )
     set(MSVC_PREFIX "vc120")
+  elseif( MSVC14 )
+    set(MSVC_PREFIX "vc140")
   else()
-    set(MSVC_PREFIX "vc130")
+    set(MSVC_PREFIX "vc150")
   endif()
   set(LIBRARY_SUFFIX "${ASSIMP_LIBRARY_SUFFIX}-${MSVC_PREFIX}-mt" CACHE STRING "the suffix for the assimp windows library")
 endif()

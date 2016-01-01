@@ -284,6 +284,8 @@ void ObjFileMtlImporter::createMaterial()
         }
     }
 
+    name = trim_whitespaces(name);
+
     std::map<std::string, ObjFile::Material*>::iterator it = m_pModel->m_MaterialMap.find( name );
     if ( m_pModel->m_MaterialMap.end() == it) {
         // New Material created
@@ -356,7 +358,9 @@ void ObjFileMtlImporter::getTexture() {
 
     std::string texture;
     m_DataIt = getName<DataArrayIt>( m_DataIt, m_DataItEnd, texture );
-    out->Set( texture );
+    if ( NULL!=out ) {
+        out->Set( texture );
+    }
 }
 
 /* /////////////////////////////////////////////////////////////////////////////
@@ -374,11 +378,10 @@ void ObjFileMtlImporter::getTexture() {
  * Because aiMaterial supports clamp option, so we also want to return it
  * /////////////////////////////////////////////////////////////////////////////
  */
-void ObjFileMtlImporter::getTextureOption(bool &clamp, int &clampIndex, aiString *&out)
-{
+void ObjFileMtlImporter::getTextureOption(bool &clamp, int &clampIndex, aiString *&out) {
     m_DataIt = getNextToken<DataArrayIt>(m_DataIt, m_DataItEnd);
 
-    //If there is any more texture option
+    // If there is any more texture option
     while (!isEndOfBuffer(m_DataIt, m_DataItEnd) && *m_DataIt == '-')
     {
         const char *pPtr( &(*m_DataIt) );
