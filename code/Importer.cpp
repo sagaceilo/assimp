@@ -3,7 +3,7 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2015, assimp team
+Copyright (c) 2006-2016, assimp team
 
 All rights reserved.
 
@@ -140,7 +140,7 @@ void AllocateFromAssimpHeap::operator delete[] ( void* data)    {
 // ------------------------------------------------------------------------------------------------
 // Importer constructor.
 Importer::Importer()
-{
+ : pimpl( NULL ) {
     // allocate the pimpl first
     pimpl = new ImporterPimpl();
 
@@ -197,7 +197,7 @@ Importer::~Importer()
 // ------------------------------------------------------------------------------------------------
 // Copy constructor - copies the config of another Importer, not the scene
 Importer::Importer(const Importer &other)
-{
+	: pimpl(NULL) {
     new(this) Importer();
 
     pimpl->mIntProperties    = other.pimpl->mIntProperties;
@@ -505,7 +505,7 @@ const aiScene* Importer::ReadFileFromMemory( const void* pBuffer,
     // read the file and recover the previous IOSystem
     static const size_t BufferSize(Importer::MaxLenHint + 28);
     char fbuff[ BufferSize ];
-    sprintf(fbuff,"%s.%s",AI_MEMORYIO_MAGIC_FILENAME,pHint);
+    ai_snprintf(fbuff, BufferSize, "%s.%s",AI_MEMORYIO_MAGIC_FILENAME,pHint);
 
     ReadFile(fbuff,pFlags);
     SetIOHandler(io);
